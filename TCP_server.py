@@ -5,7 +5,7 @@ tcp_soc = socket.socket()
 print("Socket Created: No Issues")
 
 
-port_input = int(input(f"Please enter the socket you want to listen on: "))
+port = int(input(f"Please enter the socket you want to listen on: "))
 
 
 tcp_soc.bind(('', port))
