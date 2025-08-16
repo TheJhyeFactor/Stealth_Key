@@ -1,0 +1,1 @@
+#this is going to be the translator for the encrypted messages we get weather it be ASE or Base64
