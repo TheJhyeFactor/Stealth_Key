@@ -1,0 +1,27 @@
+Screen {
+    layout: vertical;
+}
+
+#menu {
+    width: 30%;
+    border: solid #444;
+    padding: 1;
+    background: #111111;
+}
+
+#info {
+    width: 70%;
+    border: solid #444;
+    padding: 1;
+    background: #1c1c1c;
+}
+
+.menu-btn {
+    margin: 1 0;
+}
+
+.title {
+    content-align: center middle;
+    margin-bottom: 2;
+    color: cyan;
+}
