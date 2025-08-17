@@ -55,7 +55,7 @@ class ShellApp(App):
     def receive_output(self, client: ClientConnection):
         while True:
             try:
-                data = client.conn.recv(1024)
+                data = client.conn.recv(6048)
                 if not data:
                     raise ConnectionError
                 if client == self.active_client:

