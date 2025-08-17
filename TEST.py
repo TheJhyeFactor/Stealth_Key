@@ -13,7 +13,7 @@ class ClientConnection:
     def __init__(self, conn, addr):
         self.conn = conn
         self.addr = addr
-        self.log_file = (f"{addr[0]}_{addr[1].txt}", "ab")
+        self.log_file = open(f"{addr[0]}_{addr[1]}.txt", "ab")
         self.thread = None
 
 class ShellApp(App):
@@ -66,8 +66,12 @@ class ShellApp(App):
                     self.call_from_thread(
                         lambda: self.query_one("#shell_log", Log).write(data.decode(errors="ignore"))
                     )
+                    client.log_file.write(data)
+                    client.log_file.write(b"\n")
+                    client.log_file.flush()
             except:
                 client.conn.close()
+                client.log_file.close() 
                 break
 
     async def on_list_view_selected(self, event: ListView.Selected):
