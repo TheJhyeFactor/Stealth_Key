@@ -7,10 +7,13 @@ from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.widgets import Static, Header, Footer, Input, Log, ListView, ListItem
 
+
+
 class ClientConnection:
     def __init__(self, conn, addr):
         self.conn = conn
         self.addr = addr
+        self.log_file = (f"{addr[0]}_{addr[1].txt}", "ab")
         self.thread = None
 
 class ShellApp(App):
@@ -31,6 +34,7 @@ class ShellApp(App):
         yield Footer()
 
     async def on_mount(self):
+        
         threading.Thread(target=self.listen_for_clients, daemon=True).start()
 
     def listen_for_clients(self):
