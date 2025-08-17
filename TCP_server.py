@@ -1,4 +1,5 @@
 import socket
+from simple_term_menu import TerminalMenu
 import subprocess
 import threading
 import time
@@ -20,7 +21,7 @@ print(Fore.YELLOW + f"[+] Listening on port {port}" + Style.RESET_ALL)
 def shellreceiver(conn):
     while True:
         try:
-            data = conn.recv(1024)
+            data = conn.recv(6042)
             if not data:
                 raise ConnectionError
             print(data.decode(errors="ignore"), end="", flush=True)
@@ -45,9 +46,7 @@ def shellsender(conn):
 conn, addr = s.accept()
 print(f"this is a conn:\n{conn}")
 print(f"This is the addr:\n{addr}")
-client = subprocess.Popen(["gnome-terminal", print(Fore.GREEN + f"[*] Accepted new connection from: {addr[0]}:{addr[1]}" + Style.RESET_ALL)])
-
-
+print(Fore.GREEN + f"[*] Accepted new connection from: {addr[0]}:{addr[1]}" + Style.RESET_ALL)
 
 
 # start threads

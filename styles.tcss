@@ -2,26 +2,22 @@ Screen {
     layout: vertical;
 }
 
-#menu {
+#client_list {
     width: 30%;
     border: solid #444;
     padding: 1;
-    background: #111111;
+    height: 100%;
 }
 
-#info {
-    width: 70%;
-    border: solid #444;
+#shell_log {
+    height: 85%;
+    border: solid green;
     padding: 1;
-    background: #1c1c1c;
 }
 
-.menu-btn {
-    margin: 1 0;
-}
-
-.title {
-    content-align: center middle;
-    margin-bottom: 2;
-    color: cyan;
+#cmd_input {
+    height: 3;
+    border: solid gray;
+    background: black;
+    color: green;
 }
