@@ -25,14 +25,14 @@ buffer = []
 ####################################################
 #This sit the CNC infomation connection details can be dynamnic if needed but hard coded atm
 ####################################################
-port = 567
-cnc_num = "192.168.0.105"
+port = 5678
+cnc_num = "192.168.0.102"
 ####################################################
 ####################################################
 #//////////////////////////////////////////////////////////
 #socket connection to the Cnc
 cnh = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-cnh.connect((cnc_num, port)).s
+cnh.connect((cnc_num, port))
 #///////////////////////////////////////////////////////////
 
 ##########################################

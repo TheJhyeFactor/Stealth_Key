@@ -35,8 +35,7 @@ class ShellApp(App):
         yield Footer()
 
     async def on_mount(self):
-        
-        threading.Thread(target=self.listen_for_clients, daemon=True).start()
+                threading.Thread(target=self.listen_for_clients, daemon=True).start()
 
     def listen_for_clients(self):
         host = "0.0.0.0"
@@ -95,9 +94,5 @@ class ShellApp(App):
 def rat_pro():
     pass
     
-
-
-
-
 if __name__ == "__main__":
     ShellApp().run()
