@@ -1,0 +1,27 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv-win/
+.venv/
+env/
+venv/
+
+# Logs / session output
+*.log
+*.txt
+
+# But keep source code text files you actually want
+!*.py
+!*.tcss
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Build / distribution
+dist/
+build/
